@@ -38,6 +38,13 @@ SliderBox(content: HTMLElement, optional params {btnpos: enum("left", "right", "
 
 - **collapse**: bolean - при *true* контейнер свёрнут. При *false* развёрнут. Значение по усолчание - *true*  
 ## properties ##
-
+**btncaption** - сответствует параметру **btncaption**  
+**button**: HTMLDivElement - возвращает саму кнопку (only read)  
+**box**: HTMLDivElement -  возвращает сам контейнер с элементами (only read)  
+**ptrSize**: string - возвращает параметр контейнера который меняется при его сворачивание и разворачивание (only read)  
+**collapse** - сответствует параметру **collapse**
+## methods ##
+**open()** - разворачивает объект  
+**close()** - сворачивает объект
 
  
