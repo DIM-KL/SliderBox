@@ -1,0 +1,244 @@
+    
+;	SliderBox.init = function(content, params){
+		
+		
+		var _btnpos, _btnbg, _btnborderradius, _btncaption, _collapse;
+		
+		var outer_wrap, content_box, box, arrow_box;
+		
+		var ptrSize;
+		
+/*
+		if (!(content + '').indexOf('HTML') > 0 ){
+			console.error();
+			console.error('SliderBox');
+			console.error('content is not valid HTML element');
+			console.error(content);
+			return false;
+		};*/
+		params = params || {};
+		_btnpos = params.btnpos || "left";
+//		_btncaption = params.btncaption || ;
+		_btnbg = params.btnbg || '#DAA520';
+		_btnborderradius = params.btnborderradius + 'px' || '4px' ;
+		
+		
+	//	outer_wrap = document.createElement('div');
+		outer_wrap = this;
+		outer_wrap.setAttribute('data-class', 'outer_wrap');
+		
+		content_box = document.createElement('div');
+		content_box.setAttribute('data-class', 'content_box');
+		
+		box = document.createElement('div');
+		box.setAttribute('data-class', 'box');
+		
+		arrow_box = document.createElement('div');
+		arrow_box.setAttribute('data-class', 'arrow_box');
+	
+		
+		
+		
+		box.appendChild(content);
+		content_box.appendChild(box);
+		
+		arrow_box.style.backgroundColor = _btnbg;
+		
+		//outer_wrap
+		outer_wrap.style.display = "inline-block";
+		
+		
+		//content_box
+		content_box.style.border = "thin solid black";
+		content_box.style.fontSize = "0px";
+		
+		//box
+		box.style.display = "inline-block";
+		box.style.overflowX ="hidden";
+		
+		//arrow_box
+		arrow_box.style.border = "thin solid black";
+		arrow_box.style.verticalAlign = "middle";
+		arrow_box.style.textAlign = 'center';
+
+
+if (_btnpos.toLowerCase() != 'right' || 'left' || 'top' || 'bottom') {
+			_btnpos = 'left';
+			console.log();
+			console.log('SliderBox');
+			console.log('Unknow valu of param "params.btnpos"');
+			console.log(_btnpos);
+			console.log('"params.btnpos" set to default')
+};
+
+		switch (_btnpos.toLowerCase()) {
+			case 'right':
+				// code
+				content_box.style.display = "table-cell";
+				arrow_box.style.display = "table-cell";
+				
+				arrow_box.style.borderRadius = `0 ${_btnborderradius} ${_btnborderradius} 0`;
+				
+				outer_wrap.appendChild(content_box);
+				outer_wrap.appendChild(arrow_box);
+				ptrSize = "width";
+				_btncaption = params.btncaption || {'open' : '&#8656', 'close' : "&#8658"};
+				arrow_box.innerHTML = _btncaption.open;
+				
+				break;
+				
+			case 'left':
+				// code
+				arrow_box.style.display = "table-cell";
+				content_box.style.display = "table-cell";
+				arrow_box.style.borderRadius = `${_btnborderradius} 0 0 ${_btnborderradius}`;
+				
+				outer_wrap.appendChild(arrow_box);
+				outer_wrap.appendChild(content_box);
+				ptrSize = "width";
+				_btncaption = params.btncaption || {'open' : '&#8658', 'close' : "&#8656"};
+				arrow_box.innerHTML = _btncaption.open;
+				break;
+			case 'top':
+				// code
+				arrow_box.style.display = "block";
+				content_box.style.display = "block";
+				arrow_box.style.borderRadius = `${_btnborderradius} ${_btnborderradius} 0 0`;
+				
+				outer_wrap.appendChild(arrow_box);
+				outer_wrap.appendChild(content_box);
+				ptrSize = "height";
+				_btncaption = params.btncaption || {'open' : '&#8659', 'close' : "&#8657"};
+				arrow_box.innerHTML = _btncaption.open;
+				break;
+			case 'bottom':
+				// code
+				content_box.style.display = "block";
+				arrow_box.style.display = "block";
+				arrow_box.style.borderRadius = `0 0 ${_btnborderradius} ${_btnborderradius}`;
+				
+				outer_wrap.appendChild(content_box);
+				outer_wrap.appendChild(arrow_box);
+				ptrSize = "height";
+				_btncaption = params.btncaption || {'open' : '&#8657', 'close' : "&#8659"};
+				arrow_box.innerHTML = _btncaption.open;
+				break;
+				
+
+			
+			default:
+
+
+		
+			
+
+				// code
+		}
+		
+	////////////////open var//////////////
+	
+		//this.btncaption = _btncaption;
+		Object.defineProperty(this, 'btncaption' , {
+			get () {return _btncaption},
+			
+			set (value) {
+				_btncaption = value;
+				switch (box.style[ptrSize]) {
+					case 'auto':
+						// code
+				
+						arrow_box.innerHTML = _btncaption.open;
+						break;
+						
+					case '0px':
+						
+						arrow_box.innerHTML = _btncaption.close;
+						break;
+					
+				}
+			}
+		});
+		
+		Object.defineProperty(this , "button", {
+					value: arrow_box,
+					writable: false,
+					configurable: false,
+		});
+
+		Object.defineProperty(this , "box", {
+					value: box,
+					writable: false,
+					configurable: false,
+					enumerable: false
+		});
+
+
+		Object.defineProperty(this ,'ptrSize', {
+					value: ptrSize,
+					writable: false,
+					configurable: false,
+					enumerable: false
+					
+					
+				
+		});
+		
+		Object.defineProperty(this, 'collapse', {
+			get () {
+				switch (box.style[ptrSize]){ 
+					case 'auto' : return false; 
+					case '0px' : return true;
+				
+				}
+				
+			},
+			set (value){
+				if (value === true) {
+					this.close();
+				} else if (value === false) {this.open()}
+				
+				
+			}
+			
+		} )
+		
+		
+		this.open = function(){
+			this.box.style[this.ptrSize] = "auto";
+			this.button.innerHTML = this.btncaption.open;
+		};
+		this.close = function(){
+			this.box.style[this.ptrSize] = "0px";
+			this.button.innerHTML = this.btncaption.close;}
+		
+		/////////end open var///////////////
+	if (params.collapse === true) {this.collapse = params.collapse}
+	else if (params.collapse === false) {this.open()}
+	else { console.info('params.collapse uncorrect value');
+		   console.info('params.collapse set in default value');
+		   params.collapse = true;
+		   this.collapse = params.collapse;
+	}
+	
+	this.button.addEventListener('click', ()=>{
+		
+		
+		
+		this.collapse = !this.collapse;
+
+////////////////end eventHandler//////////////////////////
+	});
+		
+	
+	//	return outer_wrap;
+	
+	
+////////end function//////////////////	
+	}
+	
+	function SliderBox(content, params){
+		var div = document.createElement('div');
+		SliderBox.init.apply(div, arguments);
+		return div;
+	}
+	
